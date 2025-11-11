@@ -1,10 +1,18 @@
 import { generateReturnsArray } from './src/investmentGoals.js';
+import { Chart } from 'chart.js/auto';
 
 // // Botão do formulário que recebe o evento de click
 // const calculateButton = document.getElementById('calculate-results');
+// Pegando os elementos que vão abrigar os gráficos
+const finalMoneyChart = document.getElementById('final-money-distribution');
+const progressionChart = document.getElementById('progression');
 
 // Formulário
 const form = document.getElementById('investment-form');
+
+function formatCurrency(value) {
+  return value.toFixed(2);
+}
 
 // Criamos uma função que irá renderizar na tela os cálculos e gráficos
 function renderProgression(evt) {
@@ -43,7 +51,69 @@ function renderProgression(evt) {
     returnRatePeriod
   );
 
-  console.log(returnArray);
+  const finalInvestmentObject = returnArray[returnArray.length - 1];
+
+  // Renderizando os gráficos:
+  new Chart(finalMoneyChart, {
+    type: 'doughnut',
+    data: {
+      labels: ['Total Investido', 'Rendimento', 'Imposto'],
+      datasets: [
+        {
+          data: [
+            formatCurrency(finalInvestmentObject.investedAmount),
+            formatCurrency(
+              finalInvestmentObject.totalInterestReturns * (1 - taxRate / 100)
+            ),
+            formatCurrency(
+              finalInvestmentObject.totalInterestReturns * (taxRate / 100)
+            ),
+          ],
+          backgroundColor: [
+            'rgb(54, 162, 235)',
+            'rgb(255, 205, 86)',
+            'rgb(255, 99, 132)',
+          ],
+          hoverOffset: 4,
+        },
+      ],
+    },
+  });
+
+  // Gráfico de projeções
+  new Chart(progressionChart, {
+    type: 'bar',
+    data: {
+      labels: returnArray.map((investmentObject) => investmentObject.month),
+      datasets: [
+        {
+          label: 'Total Investido',
+          data: returnArray.map((investmentObject) =>
+            formatCurrency(investmentObject.investedAmount)
+          ),
+          backgroundColor: 'rgb(54, 162, 235)',
+        },
+        {
+          label: 'Retorno de Investimento',
+          data: returnArray.map((investmentObject) =>
+            formatCurrency(investmentObject.interestReturns)
+          ),
+          backgroundColor: 'rgb(255, 205, 86)',
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          stacked: true,
+        },
+        y: {
+          stacked: true,
+        },
+      },
+    },
+  });
 }
 
 // Função de limpar o formulário

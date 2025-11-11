@@ -56,8 +56,8 @@ export function generateReturnsArray(
       monthlyContribution;
 
     // Calcula quanto rendeu naquele mês
-    const interestReturns =
-      returnsArray[timeReference - 1].totalAmount * finalReturnRate;
+    const interestReturns = //valorMesPassado * 5% - FinalReturnRate= 1 + percentual - Logo temos que subtrair 1
+      returnsArray[timeReference - 1].totalAmount * (finalReturnRate - 1);
 
     // Total já investido
     const investedAmount = startingAmount + monthlyContribution * timeReference;
