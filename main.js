@@ -6,6 +6,8 @@ import { Chart } from 'chart.js/auto';
 // Pegando os elementos que vão abrigar os gráficos
 const finalMoneyChart = document.getElementById('final-money-distribution');
 const progressionChart = document.getElementById('progression');
+let doughnutChartReference = {};
+let progressionChartReference = {};
 
 // Formulário
 const form = document.getElementById('investment-form');
@@ -23,7 +25,7 @@ function renderProgression(evt) {
   if (document.querySelector('.error')) {
     return;
   }
-
+  resetCharts();
   // const startingAmount = Number(form['starting-amount']);
   // Capituramos os dados digitados pelo usuário
   const startingAmount = Number(
@@ -54,7 +56,7 @@ function renderProgression(evt) {
   const finalInvestmentObject = returnArray[returnArray.length - 1];
 
   // Renderizando os gráficos:
-  new Chart(finalMoneyChart, {
+  doughnutChartReference = new Chart(finalMoneyChart, {
     type: 'doughnut',
     data: {
       labels: ['Total Investido', 'Rendimento', 'Imposto'],
@@ -81,7 +83,7 @@ function renderProgression(evt) {
   });
 
   // Gráfico de projeções
-  new Chart(progressionChart, {
+  progressionChartReference = new Chart(progressionChart, {
     type: 'bar',
     data: {
       labels: returnArray.map((investmentObject) => investmentObject.month),
@@ -116,6 +118,22 @@ function renderProgression(evt) {
   });
 }
 
+function isObjectEmpty(obj) {
+  // Vai retornar um boolean que vai verificar se o obj é tamanho zero.
+  return Object.keys(obj).length === 0;
+}
+
+function resetCharts() {
+  // Verificamos se os dois objetos dos gráficos  não estão vazio.
+  if (
+    !isObjectEmpty(doughnutChartReference) &&
+    !isObjectEmpty(progressionChartReference)
+  ) {
+    doughnutChartReference.destroy();
+    progressionChartReference.destroy();
+  }
+}
+
 // Função de limpar o formulário
 function clearForm() {
   form['starting-amount'].value = '';
@@ -123,6 +141,8 @@ function clearForm() {
   form['time-amount'].value = '';
   form['return-rate'].value = '';
   form['tax-rate'].value = '';
+
+  resetCharts();
 
   // Remover as mensagens de erro
   const errorInputContainers = document.querySelectorAll('.error');
