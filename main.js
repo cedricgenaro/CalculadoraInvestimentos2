@@ -80,6 +80,9 @@ function renderProgression(evt) {
         },
       ],
     },
+    options: {
+      responsive: true,
+    },
   });
 
   // Gráfico de projeções
