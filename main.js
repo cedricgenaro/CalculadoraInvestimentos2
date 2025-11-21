@@ -201,5 +201,5 @@ for (const formElement of form) {
     formElement.addEventListener('blur', validateInput);
   }
 }
-form.addEventListener('submit', renderProgression);
+// form.addEventListener('submit', renderProgression);
 document.getElementById('clear-form').addEventListener('click', clearForm);
