@@ -9,6 +9,15 @@ const progressionChart = document.getElementById('progression');
 let doughnutChartReference = {};
 let progressionChartReference = {};
 
+// Variavel que liga as chaves do nosso objeto de calculo de investimento as colunas da nosssa tabela
+const columnsArray = [
+  { columnLabel: 'Total investido', accessor: 'investedAmount' },
+  { columnLabel: 'Rendimento mensal', accessor: 'interestReturns' },
+  { columnLabel: 'Rendimento total', accessor: 'totalInterestReturns' },
+  { columnLabel: 'Mês', accessor: 'month' },
+  { columnLabel: 'Quantia Total', accessor: 'totalAmount' },
+];
+
 // Formulário
 const form = document.getElementById('investment-form');
 
