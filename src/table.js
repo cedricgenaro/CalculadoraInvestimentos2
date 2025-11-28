@@ -3,7 +3,7 @@ const isNomEmptyArray = (arrayElement) => {
   return Array.isArray(arrayElement) && arrayElement.length > 0;
 };
 
-const createTable = (columnsArray, dataArray, tableId) => {
+export const createTable = (columnsArray, dataArray, tableId) => {
   //usando a função auxiliar testamos os argumentos passados para a função
   if (
     !isNomEmptyArray(columnsArray) ||
@@ -21,7 +21,7 @@ const createTable = (columnsArray, dataArray, tableId) => {
   }
 
   createTableHeader(tableElement, columnsArray);
-  createTableBody();
+  createTableBody(tableElement, dataArray, columnsArray);
 };
 
 function createTableHeader(tableReference, columnsArray) {
@@ -42,4 +42,26 @@ function createTableHeader(tableReference, columnsArray) {
   tableHeaderReference.appendChild(headerRow);
 }
 
-function createTableBody() {}
+function createTableBody(tableReference, tableItems, columnsArray) {
+  function createTbodyElement(tableReference) {
+    const tbody = document.createElement('tbody');
+    tableReference.appendChild(tbody);
+    return tbody;
+  }
+
+  const tableBodyReference =
+    tableReference.querySelector('tbody') ?? createTbodyElement(tableReference);
+
+  // Para preencher as linhas da nossa tabela, vamos utilizar um Iterator
+  for (const [itemIndex, tableItem] of tableItems.entries()) {
+    const tableRow = document.createElement('tr');
+    // Prenche cada coluna de uma linha por vez
+    for (const tableColumn of columnsArray) {
+      const formatFn = tableColumn.format ?? ((info) => info);
+      tableRow.innerHTML += /*html*/ `<td class='text-center'>${formatFn(
+        tableItem[tableColumn.accessor]
+      )}</td>`;
+    }
+    tableBodyReference.appendChild(tableRow);
+  }
+}
