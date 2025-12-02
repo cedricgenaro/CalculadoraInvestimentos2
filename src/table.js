@@ -34,7 +34,11 @@ function createTableHeader(tableReference, columnsArray) {
   const tableHeaderReference =
     tableReference.querySelector('thead') ?? createTheadElement(tableReference);
 
+  // Estilizando a linha do cabeçalho
   const headerRow = document.createElement('tr');
+  ['bg-blue-900', 'text-slate-200', 'sticky', 'top-0'].forEach((cssClass) =>
+    headerRow.classList.add(cssClass)
+  );
   for (const tableColumnsObject of columnsArray) {
     const headerElement = /*html*/ `<th class='text-center'>${tableColumnsObject.columnLabel}</th>`;
     headerRow.innerHTML += headerElement;
@@ -55,6 +59,10 @@ function createTableBody(tableReference, tableItems, columnsArray) {
   // Para preencher as linhas da nossa tabela, vamos utilizar um Iterator
   for (const [itemIndex, tableItem] of tableItems.entries()) {
     const tableRow = document.createElement('tr');
+    // Colore a linha impar
+    if (itemIndex % 2 !== 0) {
+      tableRow.classList.add('bg-blue-200');
+    }
     // Prenche cada coluna de uma linha por vez
     for (const tableColumn of columnsArray) {
       const formatFn = tableColumn.format ?? ((info) => info);
