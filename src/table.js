@@ -34,16 +34,22 @@ function createTableHeader(tableReference, columnsArray) {
   const tableHeaderReference =
     tableReference.querySelector('thead') ?? createTheadElement(tableReference);
 
+  // tableHeaderReference.innerHTML = '';
+
   // Estilizando a linha do cabeçalho
-  const headerRow = document.createElement('tr');
-  ['bg-blue-900', 'text-slate-200', 'sticky', 'top-0'].forEach((cssClass) =>
-    headerRow.classList.add(cssClass)
-  );
-  for (const tableColumnsObject of columnsArray) {
-    const headerElement = /*html*/ `<th class='text-center'>${tableColumnsObject.columnLabel}</th>`;
-    headerRow.innerHTML += headerElement;
+
+  const headerRow =
+    tableHeaderReference.querySelector('tr') ?? document.createElement('tr');
+  if (!headerRow.querySelector('th')) {
+    ['bg-blue-900', 'text-slate-200', 'sticky', 'top-0'].forEach((cssClass) =>
+      headerRow.classList.add(cssClass)
+    );
+    for (const tableColumnsObject of columnsArray) {
+      const headerElement = /*html*/ `<th class='text-center'>${tableColumnsObject.columnLabel}</th>`;
+      headerRow.innerHTML += headerElement;
+    }
+    tableHeaderReference.appendChild(headerRow);
   }
-  tableHeaderReference.appendChild(headerRow);
 }
 
 function createTableBody(tableReference, tableItems, columnsArray) {
@@ -55,7 +61,7 @@ function createTableBody(tableReference, tableItems, columnsArray) {
 
   const tableBodyReference =
     tableReference.querySelector('tbody') ?? createTbodyElement(tableReference);
-
+  tableBodyReference.innerHTML = '';
   // Para preencher as linhas da nossa tabela, vamos utilizar um Iterator
   for (const [itemIndex, tableItem] of tableItems.entries()) {
     const tableRow = document.createElement('tr');
@@ -72,4 +78,13 @@ function createTableBody(tableReference, tableItems, columnsArray) {
     }
     tableBodyReference.appendChild(tableRow);
   }
+}
+
+export function limprarTable(tableReference) {
+  const table = document.getElementById(tableReference);
+  const tableBody = table.querySelector('tbody');
+  if (tableBody) {
+    tableBody.innerHTML = '';
+  }
+  return;
 }

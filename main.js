@@ -1,6 +1,6 @@
 import { generateReturnsArray } from './src/investmentGoals.js';
 import { Chart } from 'chart.js/auto';
-import { createTable } from './src/table.js';
+import { createTable, limprarTable } from './src/table.js';
 
 // // Botão do formulário que recebe o evento de click
 // const calculateButton = document.getElementById('calculate-results');
@@ -105,9 +105,9 @@ function renderProgression(evt) {
             ),
           ],
           backgroundColor: [
+            'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
             'rgb(255, 205, 86)',
-            'rgb(255, 99, 132)',
           ],
           hoverOffset: 4,
         },
@@ -129,14 +129,14 @@ function renderProgression(evt) {
           data: returnsArray.map((investmentObject) =>
             formatCurrency(investmentObject.investedAmount)
           ),
-          backgroundColor: 'rgb(54, 162, 235)',
+          backgroundColor: 'rgb(255, 99, 132)',
         },
         {
           label: 'Retorno de Investimento',
           data: returnsArray.map((investmentObject) =>
             formatCurrency(investmentObject.interestReturns)
           ),
-          backgroundColor: 'rgb(255, 205, 86)',
+          backgroundColor: 'rgb(54, 162, 235)',
         },
       ],
     },
@@ -180,6 +180,7 @@ function clearForm() {
   form['tax-rate'].value = '';
 
   resetCharts();
+  limprarTable('results-table');
 
   // Remover as mensagens de erro
   const errorInputContainers = document.querySelectorAll('.error');
@@ -235,5 +236,21 @@ for (const formElement of form) {
     formElement.addEventListener('blur', validateInput);
   }
 }
+
+// Selecionamos o elemento envolucro do carrossel
+const mainEl = document.querySelector('main');
+// Selecionamos o carrossel
+const carouselEl = document.getElementById('carousel');
+// Selecionamos os botões do carrossel
+const nextButton = document.getElementById('slide-arrow-next');
+const previousButton = document.getElementById('slide-arrow-previous');
+
+nextButton.addEventListener('click', () => {
+  carouselEl.scrollLeft += mainEl.clientWidth;
+});
+previousButton.addEventListener('click', () => {
+  carouselEl.scrollLeft -= mainEl.clientWidth;
+});
+
 form.addEventListener('submit', renderProgression);
 document.getElementById('clear-form').addEventListener('click', clearForm);
